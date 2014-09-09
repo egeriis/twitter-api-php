@@ -77,16 +77,21 @@ class TwitterAPIExchange
     
     /**
      * Set getfield string, example: '?screen_name=J7mbo'
-     * 
-     * @param string $string Get key and value pairs as string
-     * 
+     *
+     * @param string|array $params Set key and value pairs
+     *
      * @return \TwitterAPIExchange Instance of self for method chaining
      */
-    public function setGetfield($string)
+    public function setGetfield($params)
     {
-        if (!is_null($this->getPostfields())) 
-        { 
-            throw new Exception('You can only choose get OR post fields.'); 
+        if (!is_null($this->getPostfields()))
+        {
+            throw new Exception('You can only choose get OR post fields.');
+        }
+
+        if (is_array($params)) {
+            $this->getfield = '?' . http_build_query($params);
+            return $this;
         }
         
         $search = array('#', ',', '+', ':');
